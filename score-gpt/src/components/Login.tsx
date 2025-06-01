@@ -1,19 +1,24 @@
 import React from "react";
 import "./WebPlayback.css";
 
-const Login = () => {
+const Login: React.FC = () => {
+  const handleLogin = (): void => {
+    // Use window.location to force a full page navigation
+    window.location.href = "/auth/login";
+  };
+
   return (
     <div className="login-container">
       <div className="login-content">
         <h2>Connect to Spotify</h2>
         <p>Login to access your Spotify music library</p>
-        <a
+        <button
           className="btn-spotify"
-          href="/auth/login"
+          onClick={handleLogin}
           aria-label="Login with Spotify"
         >
           Login with Spotify
-        </a>
+        </button>
       </div>
     </div>
   );

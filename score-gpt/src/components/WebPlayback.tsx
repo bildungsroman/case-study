@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Track, WebPlaybackPlayer } from "../types";
 import "./WebPlayback.css";
 
-const track = {
+interface WebPlaybackProps {
+  token: string;
+}
+
+const defaultTrack: Track = {
   name: "",
   album: {
     images: [{ url: "" }],
@@ -9,11 +14,13 @@ const track = {
   artists: [{ name: "" }],
 };
 
-const WebPlayback = ({ token }) => {
-  const [isPaused, setPaused] = useState(false);
-  const [isActive, setActive] = useState(false);
-  const [player, setPlayer] = useState(undefined);
-  const [currentTrack, setTrack] = useState(track);
+const WebPlayback: React.FC<WebPlaybackProps> = ({ token }) => {
+  const [isPaused, setPaused] = useState<boolean>(false);
+  const [isActive, setActive] = useState<boolean>(false);
+  const [player, setPlayer] = useState<WebPlaybackPlayer | undefined>(
+    undefined
+  );
+  const [currentTrack, setTrack] = useState<Track>(defaultTrack);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -25,7 +32,7 @@ const WebPlayback = ({ token }) => {
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new window.Spotify.Player({
         name: "Web Playback SDK",
-        getOAuthToken: (cb) => {
+        getOAuthToken: (cb: (token: string) => void) => {
           cb(token);
         },
         volume: 0.5,
@@ -33,15 +40,18 @@ const WebPlayback = ({ token }) => {
 
       setPlayer(player);
 
-      player.addListener("ready", ({ device_id }) => {
+      player.addListener("ready", ({ device_id }: { device_id: string }) => {
         console.log("Ready with Device ID", device_id);
       });
 
-      player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
-      });
+      player.addListener(
+        "not_ready",
+        ({ device_id }: { device_id: string }) => {
+          console.log("Device ID has gone offline", device_id);
+        }
+      );
 
-      player.addListener("player_state_changed", (state) => {
+      player.addListener("player_state_changed", (state: any) => {
         if (!state) {
           return;
         }
@@ -49,7 +59,7 @@ const WebPlayback = ({ token }) => {
         setTrack(state.track_window.current_track);
         setPaused(state.paused);
 
-        player.getCurrentState().then((state) => {
+        player.getCurrentState().then((state: any) => {
           !state ? setActive(false) : setActive(true);
         });
       });
@@ -65,6 +75,18 @@ const WebPlayback = ({ token }) => {
       }
     };
   }, [token]);
+
+  const handlePreviousTrack = (): void => {
+    player?.previousTrack();
+  };
+
+  const handleTogglePlay = (): void => {
+    player?.togglePlay();
+  };
+
+  const handleNextTrack = (): void => {
+    player?.nextTrack();
+  };
 
   if (!isActive) {
     return (
@@ -95,7 +117,7 @@ const WebPlayback = ({ token }) => {
 
           <button
             className="btn-spotify"
-            onClick={() => player.previousTrack()}
+            onClick={handlePreviousTrack}
             aria-label="Previous track"
           >
             &lt;&lt;
@@ -103,7 +125,7 @@ const WebPlayback = ({ token }) => {
 
           <button
             className="btn-spotify"
-            onClick={() => player.togglePlay()}
+            onClick={handleTogglePlay}
             aria-label={isPaused ? "Play" : "Pause"}
           >
             {isPaused ? "PLAY" : "PAUSE"}
@@ -111,7 +133,7 @@ const WebPlayback = ({ token }) => {
 
           <button
             className="btn-spotify"
-            onClick={() => player.nextTrack()}
+            onClick={handleNextTrack}
             aria-label="Next track"
           >
             &gt;&gt;

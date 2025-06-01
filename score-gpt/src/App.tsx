@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 import ChatInterface from "./components/ChatInterface";
 import Login from "./components/Login";
 import SheetMusicDisplay from "./components/SheetMusicDisplay";
 import WebPlayback from "./components/WebPlayback";
+import { ScoreData } from "./types";
+import "./App.css";
 
-const App = () => {
-  const [generatedScore, setGeneratedScore] = useState(null);
-  const [token, setToken] = useState("");
+const App: React.FC = () => {
+  const [generatedScore, setGeneratedScore] = useState<ScoreData | null>(null);
+  const [token, setToken] = useState<string>("");
 
-  const handleScoreGenerated = (scoreData) => {
+  const handleScoreGenerated = (scoreData: ScoreData): void => {
     setGeneratedScore(scoreData);
   };
 
   useEffect(() => {
-    const getToken = async () => {
+    const getToken = async (): Promise<void> => {
       try {
         const response = await fetch("/auth/token");
         const json = await response.json();

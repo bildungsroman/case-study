@@ -1,44 +1,67 @@
+import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import App from "./App";
+import { ScoreData } from "./types";
 
 // Mock the child components to isolate App component testing
-jest.mock("./components/ChatInterface", () => ({ onScoreGenerated }) => (
-  <div
-    data-testid="mock-chat-interface"
-    onClick={() =>
-      onScoreGenerated &&
-      onScoreGenerated({
-        imageUrl: "test-url",
-        instrument: "Piano",
-        trackTitle: "Test Track",
-      })
-    }
-  >
-    Chat Interface Component
-  </div>
-));
-jest.mock("./components/WebPlayback", () => ({ token }) => (
-  <div data-testid="mock-web-playback" data-token={token}>
-    Web Playback Component
-  </div>
-));
-jest.mock("./components/Login", () => () => (
-  <div data-testid="mock-login">Login Component</div>
-));
-jest.mock(
-  "./components/SheetMusicDisplay",
-  () =>
-    ({ scoreImage, instrument, trackTitle }) => (
-      <div
-        data-testid="mock-sheet-music-display"
-        data-score={scoreImage}
-        data-instrument={instrument}
-        data-track={trackTitle}
-      >
-        Sheet Music Display Component
-      </div>
-    )
-);
+jest.mock("./components/ChatInterface", () => {
+  const MockChatInterface = ({
+    onScoreGenerated,
+  }: {
+    onScoreGenerated: (data: ScoreData) => void;
+  }) => (
+    <div
+      data-testid="mock-chat-interface"
+      onClick={() =>
+        onScoreGenerated({
+          imageUrl: "test-url",
+          instrument: "Piano",
+          trackTitle: "Test Track",
+        })
+      }
+    >
+      Chat Interface Component
+    </div>
+  );
+  return MockChatInterface;
+});
+
+jest.mock("./components/WebPlayback", () => {
+  const MockWebPlayback = ({ token }: { token: string }) => (
+    <div data-testid="mock-web-playback" data-token={token}>
+      Web Playback Component
+    </div>
+  );
+  return MockWebPlayback;
+});
+
+jest.mock("./components/Login", () => {
+  const MockLogin = () => <div data-testid="mock-login">Login Component</div>;
+  return MockLogin;
+});
+
+jest.mock("./components/SheetMusicDisplay", () => {
+  const MockSheetMusicDisplay = ({
+    scoreImage,
+    instrument,
+    trackTitle,
+  }: {
+    scoreImage: string;
+    instrument: string;
+    trackTitle: string;
+  }) => (
+    <div
+      data-testid="mock-sheet-music-display"
+      data-score={scoreImage}
+      data-instrument={instrument}
+      data-track={trackTitle}
+    >
+      Sheet Music Display Component
+    </div>
+  );
+  return MockSheetMusicDisplay;
+});
 
 describe("App Component", () => {
   test("renders the header with correct title", () => {

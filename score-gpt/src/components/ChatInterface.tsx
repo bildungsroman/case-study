@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import OpenAI from "openai";
+import { Message, ScoreData } from "../types";
 import "./ChatInterface.css";
+
+interface ChatInterfaceProps {
+  onScoreGenerated: (scoreData: ScoreData) => void;
+}
 
 // Initialize the OpenAI client
 const openai = new OpenAI({
@@ -8,17 +13,19 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const ChatInterface = ({ onScoreGenerated }) => {
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ onScoreGenerated }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     if (inputMessage.trim() === "") return;
 
     // Add user message to the chat
-    const userMessage = { text: inputMessage, sender: "user" };
+    const userMessage: Message = { text: inputMessage, sender: "user" };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInputMessage("");
@@ -33,7 +40,8 @@ const ChatInterface = ({ onScoreGenerated }) => {
 
       // Prepare the conversation history for the API call
       const conversationHistory = updatedMessages.map((msg) => ({
-        role: msg.sender === "user" ? "user" : "assistant",
+        role:
+          msg.sender === "user" ? ("user" as const) : ("assistant" as const),
         content: msg.text,
       }));
 
@@ -42,7 +50,7 @@ const ChatInterface = ({ onScoreGenerated }) => {
         model: "gpt-4.1",
         messages: [
           {
-            role: "system",
+            role: "system" as const,
             content:
               "You are a musical assistant that can analyze songs and transcribe them into sheet music. When asked to transcribe a song, respond as if you've analyzed the audio and created sheet music.",
           },
@@ -52,11 +60,10 @@ const ChatInterface = ({ onScoreGenerated }) => {
       });
 
       // Get the response text
-      const responseText = completion.choices[0].message.content;
-      console.log({ completion });
+      const responseText = completion.choices[0].message.content || "";
 
       // Create the bot response object
-      const botResponse = {
+      const botResponse: Message = {
         text: responseText,
         sender: "bot",
         hasScore: isScoreRequest,
@@ -90,6 +97,10 @@ const ChatInterface = ({ onScoreGenerated }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setInputMessage(e.target.value);
   };
 
   return (
@@ -135,7 +146,7 @@ const ChatInterface = ({ onScoreGenerated }) => {
         <input
           type="text"
           value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
+          onChange={handleInputChange}
           placeholder="Type a message... (e.g., 'Transcribe this song')"
           className="message-input"
           disabled={isLoading}
