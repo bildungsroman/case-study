@@ -30,6 +30,7 @@ var app = express();
 
 // Enable CORS for all routes
 app.use(cors());
+app.use(express.json());
 
 // Debug middleware to log requests
 app.use((req, res, next) => {
@@ -55,8 +56,14 @@ app.get("/auth/login", (req, res) => {
   );
 });
 
-app.get("/auth/callback", (req, res) => {
-  var code = req.query.code;
+// Handle both GET and POST for callback
+app.all("/auth/callback", (req, res) => {
+  // Get code from query params (GET) or request body (POST)
+  var code = req.method === "POST" ? req.body.code : req.query.code;
+
+  if (!code) {
+    return res.status(400).json({ error: "No code provided" });
+  }
 
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
@@ -79,10 +86,22 @@ app.get("/auth/callback", (req, res) => {
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
-      res.redirect("/");
+
+      // For GET requests, redirect to the frontend
+      if (req.method === "GET") {
+        res.redirect("/");
+      } else {
+        // For POST requests, return the token as JSON
+        res.json({ access_token: access_token });
+      }
     } else {
       console.error("Error getting access token:", error || body);
-      res.status(500).send("Error during authentication");
+
+      if (req.method === "GET") {
+        res.status(500).send("Error during authentication");
+      } else {
+        res.status(500).json({ error: "Error during authentication" });
+      }
     }
   });
 });

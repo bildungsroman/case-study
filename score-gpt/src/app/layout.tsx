@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import "./index.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ScoreGPT",
-  description: "Web site created with Next.js.",
+  description: "AI-powered music transcription and sheet music generation",
 };
 
 export default function RootLayout({
@@ -15,7 +15,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
-        <script src="https://sdk.scdn.co/spotify-player.js"></script>
         <div id="root">{children}</div>
       </body>
     </html>

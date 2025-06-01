@@ -10,8 +10,7 @@
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "prebuild": "npm run lint && npm run typecheck",
     "server": "node server",
-    "start": "next dev --turbopack",
-    "start:static": "npx serve@latest ./build",
+    "start": "next dev",
     "test": "next test",
     "typecheck": "tsc --noEmit && echo '✅ Type check passed!'"
   },
@@ -39,7 +38,6 @@
       "^@/(.*)$": "<rootDir>/src/$1"
     }
   },
-  "proxy": "http://localhost:5000",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -50,7 +48,6 @@
     "openai": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-scripts": "5.0.1",
     "typescript": "^5.4.2",
     "web-vitals": "^2.1.4"
   },

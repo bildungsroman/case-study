@@ -1,9 +1,11 @@
+"use client";
+
 import React from "react";
 import "./WebPlayback.css";
 
 const Login: React.FC = () => {
   const handleLogin = (): void => {
-    // Use window.location to force a full page navigation
+    // Use Next.js app directory API route for login
     window.location.href = "/auth/login";
   };
 

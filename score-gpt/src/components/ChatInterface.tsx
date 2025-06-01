@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import OpenAI from "openai";
-import { Message, ScoreData } from "../types";
 import "./ChatInterface.css";
+import { Message, ScoreData } from "../types";
 
 interface ChatInterfaceProps {
   onScoreGenerated: (scoreData: ScoreData) => void;
