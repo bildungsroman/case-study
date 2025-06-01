@@ -1,14 +1,16 @@
-import { createProxyMiddleware, Options } from "http-proxy-middleware";
-import { Express } from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import type { Express } from "express";
 
-module.exports = function (app: Express): void {
+/**
+ * Sets up proxy middleware for development server
+ * @param app Express application
+ */
+module.exports = function (app: Express) {
   app.use(
     "/auth",
     createProxyMiddleware({
       target: "http://localhost:5000",
       changeOrigin: true,
-      // Using any type to bypass the type error since logLevel is supported but not in the types
-      ...({ logLevel: "debug" } as any as Options),
     })
   );
 };

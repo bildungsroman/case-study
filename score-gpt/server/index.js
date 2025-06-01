@@ -1,32 +1,39 @@
-const express = require("express");
-const request = require("request");
-const dotenv = require("dotenv");
-const path = require("path");
-const cors = require("cors");
+import express from "express";
+import request from "request";
+import dotenv from "dotenv";
+import path from "path";
+import cors from "cors";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const port = 5000;
 
-global.access_token = "";
+// Use dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Use global variable for access token
+globalThis.access_token = "";
 
 dotenv.config();
 
-var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
-var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
+const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = "http://localhost:3000/auth/callback";
+const spotify_redirect_uri = "http://localhost:3000/auth/callback";
 
-var generateRandomString = function (length) {
-  var text = "";
-  var possible =
+const generateRandomString = function (length) {
+  let text = "";
+  const possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
 };
 
-var app = express();
+const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
@@ -39,10 +46,10 @@ app.use((req, res, next) => {
 });
 
 app.get("/auth/login", (req, res) => {
-  var scope = "streaming user-read-email user-read-private";
-  var state = generateRandomString(16);
+  const scope = "streaming user-read-email user-read-private";
+  const state = generateRandomString(16);
 
-  var auth_query_parameters = new URLSearchParams({
+  const auth_query_parameters = new URLSearchParams({
     response_type: "code",
     client_id: spotify_client_id,
     scope: scope,
@@ -59,13 +66,13 @@ app.get("/auth/login", (req, res) => {
 // Handle both GET and POST for callback
 app.all("/auth/callback", (req, res) => {
   // Get code from query params (GET) or request body (POST)
-  var code = req.method === "POST" ? req.body.code : req.query.code;
+  const code = req.method === "POST" ? req.body.code : req.query.code;
 
   if (!code) {
     return res.status(400).json({ error: "No code provided" });
   }
 
-  var authOptions = {
+  const authOptions = {
     url: "https://accounts.spotify.com/api/token",
     form: {
       code: code,
@@ -85,14 +92,14 @@ app.all("/auth/callback", (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      access_token = body.access_token;
+      globalThis.access_token = body.access_token;
 
       // For GET requests, redirect to the frontend
       if (req.method === "GET") {
         res.redirect("/");
       } else {
         // For POST requests, return the token as JSON
-        res.json({ access_token: access_token });
+        res.json({ access_token: globalThis.access_token });
       }
     } else {
       console.error("Error getting access token:", error || body);
@@ -107,7 +114,7 @@ app.all("/auth/callback", (req, res) => {
 });
 
 app.get("/auth/token", (req, res) => {
-  res.json({ access_token: access_token });
+  res.json({ access_token: globalThis.access_token });
 });
 
 // Health check endpoint
