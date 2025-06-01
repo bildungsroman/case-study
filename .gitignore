@@ -11,7 +11,8 @@ node_modules/
 
 # Next.js build output
 .next
-out
+out]
+next-env.d.ts
 
 # Notes
 notes.md

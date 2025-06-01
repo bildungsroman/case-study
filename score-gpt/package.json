@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "react-scripts build",
+    "build": "next build",
     "dev": "run-p server start",
-    "eject": "react-scripts eject",
     "fix": "npx prettier . --write",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" && echo '✅ Linting passed!'",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "prebuild": "npm run lint && npm run typecheck",
     "server": "node server",
-    "start": "react-scripts start",
-    "test": "react-scripts test",
+    "start": "next dev --turbopack",
+    "start:static": "npx serve@latest ./build",
+    "test": "next test",
     "typecheck": "tsc --noEmit && echo '✅ Type check passed!'"
   },
   "browserslist": {
@@ -46,6 +46,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
+    "next": "^15.3.3",
     "openai": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
