@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import ChatInterface from './components/ChatInterface';
-import Login from './components/Login';
-import SheetMusicDisplay from './components/SheetMusicDisplay';
-import WebPlayback from './components/WebPlayback';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import ChatInterface from "./components/ChatInterface";
+import Login from "./components/Login";
+import SheetMusicDisplay from "./components/SheetMusicDisplay";
+import WebPlayback from "./components/WebPlayback";
 
 const App = () => {
   const [generatedScore, setGeneratedScore] = useState(null);
-  const [token, setToken] = useState('');
-  
+  const [token, setToken] = useState("");
+
   const handleScoreGenerated = (scoreData) => {
     setGeneratedScore(scoreData);
   };
@@ -16,14 +16,14 @@ const App = () => {
   useEffect(() => {
     const getToken = async () => {
       try {
-        const response = await fetch('/auth/token');
+        const response = await fetch("/auth/token");
         const json = await response.json();
         setToken(json.access_token);
       } catch (error) {
-        console.error('Error fetching token:', error);
+        console.error("Error fetching token:", error);
       }
     };
-    
+
     getToken();
   }, []);
 
@@ -35,11 +35,11 @@ const App = () => {
       </header>
       <main className="App-main">
         <div className="app-container">
-          {token === '' ? <Login /> : <WebPlayback token={token} />}
+          {token === "" ? <Login /> : <WebPlayback token={token} />}
           <ChatInterface onScoreGenerated={handleScoreGenerated} />
-          
+
           {generatedScore && (
-            <SheetMusicDisplay 
+            <SheetMusicDisplay
               scoreImage={generatedScore.imageUrl}
               instrument={generatedScore.instrument}
               trackTitle={generatedScore.trackTitle}

@@ -1,5 +1,5 @@
-import React from 'react';
-import './SheetMusicDisplay.css';
+import React from "react";
+import "./SheetMusicDisplay.css";
 
 const SheetMusicDisplay = ({ scoreImage, instrument, trackTitle }) => {
   if (!scoreImage) {
@@ -15,15 +15,15 @@ const SheetMusicDisplay = ({ scoreImage, instrument, trackTitle }) => {
           <span className="track-title">"{trackTitle}"</span>
         </div>
       </div>
-      
+
       <div className="sheet-music-display">
-        <img 
-          src={scoreImage} 
+        <img
+          src={scoreImage}
           alt={`Sheet music for ${instrument} part of ${trackTitle}`}
           className="score-image"
         />
       </div>
-      
+
       <div className="sheet-music-actions">
         <button className="action-button download-button">
           <span className="button-icon">⬇️</span> Download PDF

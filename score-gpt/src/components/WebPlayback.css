@@ -45,7 +45,7 @@
 }
 
 .btn-spotify {
-  background-color: #2A7B9B;
+  background-color: #2a7b9b;
   color: white;
   border: none;
   border-radius: 20px;
@@ -60,7 +60,7 @@
 }
 
 .btn-spotify:hover {
-  background-color: #57C785;
+  background-color: #57c785;
   transform: scale(1.05);
 }
 
@@ -83,7 +83,7 @@
 
 .login-content h2 {
   margin-bottom: 10px;
-  color: #57C785;
+  color: #57c785;
 }
 
 .login-content p {

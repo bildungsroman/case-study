@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import './MusicPlayer.css';
+import { useState, useRef, useEffect, useMemo } from "react";
+import "./MusicPlayer.css";
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -7,29 +7,32 @@ const MusicPlayer = () => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.7);
   const [currentTrack, setCurrentTrack] = useState(0);
-  
+
   const audioRef = useRef(null);
-  
+
   // Use useMemo to prevent the tracks array from being recreated on every render
-  const tracks = useMemo(() => [
-    {
-      title: "Ambient Melody",
-      artist: "Sound Sculptor",
-      src: "https://example.com/track1.mp3",
-      cover: "https://via.placeholder.com/80/2A7B9B/FFFFFF"
-    },
-    {
-      title: "Rhythmic Patterns",
-      artist: "Beat Architect",
-      src: "https://example.com/track2.mp3",
-      cover: "https://via.placeholder.com/80/57C785/FFFFFF"
-    }
-  ], []);
+  const tracks = useMemo(
+    () => [
+      {
+        title: "Ambient Melody",
+        artist: "Sound Sculptor",
+        src: "https://example.com/track1.mp3",
+        cover: "https://via.placeholder.com/80/2A7B9B/FFFFFF",
+      },
+      {
+        title: "Rhythmic Patterns",
+        artist: "Beat Architect",
+        src: "https://example.com/track2.mp3",
+        cover: "https://via.placeholder.com/80/57C785/FFFFFF",
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     // Set up audio event listeners
     const audio = audioRef.current;
-    
+
     const setAudioData = () => {
       setDuration(audio.duration);
       setCurrentTime(audio.currentTime);
@@ -48,22 +51,22 @@ const MusicPlayer = () => {
     };
 
     // Add event listeners
-    audio.addEventListener('loadeddata', setAudioData);
-    audio.addEventListener('timeupdate', setAudioTime);
-    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener("loadeddata", setAudioData);
+    audio.addEventListener("timeupdate", setAudioTime);
+    audio.addEventListener("ended", handleEnded);
 
     // Clean up event listeners
     return () => {
-      audio.removeEventListener('loadeddata', setAudioData);
-      audio.removeEventListener('timeupdate', setAudioTime);
-      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener("loadeddata", setAudioData);
+      audio.removeEventListener("timeupdate", setAudioTime);
+      audio.removeEventListener("ended", handleEnded);
     };
   }, [currentTrack, tracks.length]);
 
   useEffect(() => {
     // Update audio source when track changes
     audioRef.current.src = tracks[currentTrack].src;
-    
+
     if (isPlaying) {
       audioRef.current.play();
     }
@@ -111,17 +114,17 @@ const MusicPlayer = () => {
     if (isNaN(time)) return "00:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   return (
     <div className="music-player">
       <audio ref={audioRef} />
-      
+
       <div className="track-info">
-        <img 
-          src={tracks[currentTrack].cover} 
-          alt={`${tracks[currentTrack].title} cover`} 
+        <img
+          src={tracks[currentTrack].cover}
+          alt={`${tracks[currentTrack].title} cover`}
           className="cover-art"
         />
         <div className="track-details">
@@ -129,19 +132,19 @@ const MusicPlayer = () => {
           <div className="track-artist">{tracks[currentTrack].artist}</div>
         </div>
       </div>
-      
+
       <div className="player-controls">
         <button className="control-button" onClick={handlePrevious}>
           ⏮️
         </button>
         <button className="control-button play-button" onClick={togglePlay}>
-          {isPlaying ? '⏸️' : '▶️'}
+          {isPlaying ? "⏸️" : "▶️"}
         </button>
         <button className="control-button" onClick={handleNext}>
           ⏭️
         </button>
       </div>
-      
+
       <div className="progress-container">
         <span className="time">{formatTime(currentTime)}</span>
         <input
@@ -154,7 +157,7 @@ const MusicPlayer = () => {
         />
         <span className="time">{formatTime(duration)}</span>
       </div>
-      
+
       <div className="volume-container">
         <span className="volume-icon">🔊</span>
         <input
