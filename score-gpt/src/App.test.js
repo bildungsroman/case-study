@@ -1,19 +1,36 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import App from './App';
 
 // Mock the child components to isolate App component testing
 jest.mock('./components/ChatInterface', () => ({ onScoreGenerated }) => (
-  <div data-testid="mock-chat-interface" onClick={() => onScoreGenerated && onScoreGenerated({
-    imageUrl: 'test-url',
-    instrument: 'Piano',
-    trackTitle: 'Test Track'
-  })}>
+  <div 
+    data-testid="mock-chat-interface" 
+    onClick={() => onScoreGenerated && onScoreGenerated({
+      imageUrl: 'test-url',
+      instrument: 'Piano',
+      trackTitle: 'Test Track'
+    })}
+  >
     Chat Interface Component
   </div>
 ));
-jest.mock('./components/MusicPlayer', () => () => <div data-testid="mock-music-player">Music Player Component</div>);
+jest.mock('./components/WebPlayback', () => ({ token }) => (
+  <div data-testid="mock-web-playback" data-token={token}>
+    Web Playback Component
+  </div>
+));
+jest.mock('./components/Login', () => () => (
+  <div data-testid="mock-login">
+    Login Component
+  </div>
+));
 jest.mock('./components/SheetMusicDisplay', () => ({ scoreImage, instrument, trackTitle }) => (
-  <div data-testid="mock-sheet-music-display" data-score={scoreImage} data-instrument={instrument} data-track={trackTitle}>
+  <div 
+    data-testid="mock-sheet-music-display" 
+    data-score={scoreImage} 
+    data-instrument={instrument} 
+    data-track={trackTitle}
+  >
     Sheet Music Display Component
   </div>
 ));
@@ -31,10 +48,10 @@ describe('App Component', () => {
     expect(subtitleElement).toBeInTheDocument();
   });
 
-  test('renders the MusicPlayer component', () => {
+  test('renders the Login component initially', () => {
     render(<App />);
-    const musicPlayerElement = screen.getByTestId('mock-music-player');
-    expect(musicPlayerElement).toBeInTheDocument();
+    const loginElement = screen.getByTestId('mock-login');
+    expect(loginElement).toBeInTheDocument();
   });
 
   test('renders the ChatInterface component', () => {
@@ -49,16 +66,19 @@ describe('App Component', () => {
     expect(sheetMusicElement).not.toBeInTheDocument();
   });
 
-  test('renders SheetMusicDisplay when score is generated', () => {
+  test('renders SheetMusicDisplay when score is generated', async () => {
     render(<App />);
     
     // Simulate score generation by clicking the mock chat interface
-    const chatInterfaceElement = screen.getByTestId('mock-chat-interface');
-    chatInterfaceElement.click();
+    fireEvent.click(screen.getByTestId('mock-chat-interface'));
     
-    // Now the SheetMusicDisplay should be rendered
+    // Wait for the SheetMusicDisplay to be rendered
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-sheet-music-display')).toBeInTheDocument();
+    });
+    
+    // Now check the attributes
     const sheetMusicElement = screen.getByTestId('mock-sheet-music-display');
-    expect(sheetMusicElement).toBeInTheDocument();
     expect(sheetMusicElement).toHaveAttribute('data-score', 'test-url');
     expect(sheetMusicElement).toHaveAttribute('data-instrument', 'Piano');
     expect(sheetMusicElement).toHaveAttribute('data-track', 'Test Track');
