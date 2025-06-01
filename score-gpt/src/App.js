@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import ChatInterface from './components/ChatInterface';
+import MusicPlayer from './components/MusicPlayer';
+import SheetMusicDisplay from './components/SheetMusicDisplay';
 
 function App() {
+  const [generatedScore, setGeneratedScore] = useState(null);
+  
+  const handleScoreGenerated = (scoreData) => {
+    setGeneratedScore(scoreData);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Score GPT</h1>
+        <p>Chat and Music Player Interface</p>
       </header>
+      <main className="App-main">
+        <div className="app-container">
+          <MusicPlayer />
+          <ChatInterface onScoreGenerated={handleScoreGenerated} />
+          
+          {generatedScore && (
+            <SheetMusicDisplay 
+              scoreImage={generatedScore.imageUrl}
+              instrument={generatedScore.instrument}
+              trackTitle={generatedScore.trackTitle}
+            />
+          )}
+        </div>
+      </main>
     </div>
   );
 }
