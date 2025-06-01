@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "cors": "^2.8.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
@@ -18,8 +19,9 @@
     "eject": "react-scripts eject",
     "fix": "npx prettier . --write",
     "lint": "eslint \"src/**/*.js\" && echo '✅ Linting passed!'",
-    "server": "HOST=127.0.0.1 node server",
-    "start": "HOST=127.0.0.1 react-scripts start",
+    "lint:fix": "eslint \"src/**/*.js\" --fix",
+    "server": "node server",
+    "start": "react-scripts start",
     "test": "react-scripts test"
   },
   "eslintConfig": {
@@ -49,5 +51,6 @@
     "npm-run-all": "^4.1.5",
     "prettier": "3.5.3",
     "request": "^2.88.2"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

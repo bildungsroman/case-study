@@ -1,6 +1,8 @@
 const express = require("express");
 const request = require("request");
 const dotenv = require("dotenv");
+const path = require("path");
+const cors = require("cors");
 
 const port = 5000;
 
@@ -25,6 +27,15 @@ var generateRandomString = function (length) {
 };
 
 var app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Debug middleware to log requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
 app.get("/auth/login", (req, res) => {
   var scope = "streaming user-read-email user-read-private";
@@ -69,6 +80,9 @@ app.get("/auth/callback", (req, res) => {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
       res.redirect("/");
+    } else {
+      console.error("Error getting access token:", error || body);
+      res.status(500).send("Error during authentication");
     }
   });
 });
@@ -77,6 +91,11 @@ app.get("/auth/token", (req, res) => {
   res.json({ access_token: access_token });
 });
 
-app.listen(port, () => {
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.listen(port, "0.0.0.0", () => {
   console.log(`Listening at http://localhost:${port}`);
 });
