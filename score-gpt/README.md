@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Score GPT [WIP]
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Score GPT is an AI-powered music transcription and sheet music generation application that integrates with Spotify. It allows users to chat with an AI assistant about music, generate sheet music, and control Spotify playback directly from the application.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Spotify Integration**: Play, pause, and control your Spotify music directly from the app
+- **AI Chat Interface**: Discuss music theory, request transcriptions, and get music recommendations
+- **Sheet Music Generation**: Generate and display sheet music for various instruments
+- **Real-time Music Player**: View currently playing track information and album art
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: Next.js 15, React 19
+- **Backend**: Express.js server for Spotify authentication
+- **Authentication**: OAuth 2.0 flow with Spotify API
+- **AI Integration**: OpenAI API for music analysis and sheet music generation
+- **Type Safety**: TypeScript for improved developer experience
+- **Styling**: CSS modules for component-specific styling
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+- `/src`: Main application code
+  - `/app`: Next.js App Router components and routes
+  - `/components`: Reusable React components
+  - `/types`: TypeScript type definitions
+- `/server`: Express server for Spotify authentication
+- `/public`: Static assets
+- `/build`: Production build output
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (v18.18.0 or higher)
+- Spotify Developer Account and API credentials
+- OpenAI API key
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Environment Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create a `.env.local` file in the root directory with the following variables:
 
-### `npm run eject`
+```
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Install dependencies
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Available Scripts
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Starts both the Next.js development server and the authentication server |
+| `npm run build` | Builds the application for production |
+| `npm run start` | Starts the Next.js development server |
+| `npm run server` | Starts only the authentication server |
+| `npm run lint` | Runs ESLint to check for code quality issues |
+| `npm run lint:fix` | Automatically fixes ESLint issues when possible |
+| `npm run format` | Formats code using Prettier |
+| `npm run typecheck` | Runs TypeScript type checking |
+| `npm test` | Runs the test suite |
 
-## Learn More
+## Deployment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This application is configured for deployment on Vercel. The build output is set to the `build` directory, and a `vercel.json` file is included for proper configuration.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is private and not licensed for public use.
