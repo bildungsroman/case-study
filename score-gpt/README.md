@@ -56,17 +56,17 @@ npm install
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Starts both the Next.js development server and the authentication server |
-| `npm run build` | Builds the application for production |
-| `npm run start` | Starts the Next.js development server |
-| `npm run server` | Starts only the authentication server |
-| `npm run lint` | Runs ESLint to check for code quality issues |
-| `npm run lint:fix` | Automatically fixes ESLint issues when possible |
-| `npm run format` | Formats code using Prettier |
-| `npm run typecheck` | Runs TypeScript type checking |
-| `npm test` | Runs the test suite |
+| Command             | Description                                                              |
+| ------------------- | ------------------------------------------------------------------------ |
+| `npm run dev`       | Starts both the Next.js development server and the authentication server |
+| `npm run build`     | Builds the application for production                                    |
+| `npm run start`     | Starts the Next.js development server                                    |
+| `npm run server`    | Starts only the authentication server                                    |
+| `npm run lint`      | Runs ESLint to check for code quality issues                             |
+| `npm run lint:fix`  | Automatically fixes ESLint issues when possible                          |
+| `npm run format`    | Formats code using Prettier                                              |
+| `npm run typecheck` | Runs TypeScript type checking                                            |
+| `npm test`          | Runs the test suite                                                      |
 
 ## Deployment
 

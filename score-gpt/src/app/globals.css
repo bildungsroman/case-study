@@ -25,6 +25,26 @@ code {
   --medium-text: #b3b3b3;
 }
 
+/* Theme support */
+[data-theme="light"] {
+  --dark-bg: #ffffff;
+  --darker-bg: #f5f5f5;
+  --light-text: #333333;
+  --medium-text: #666666;
+}
+
+[data-theme="light"] body {
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+}
+
+/* Reduced motion support */
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 /* App styles from App.css */
 .App {
   text-align: center;
@@ -58,6 +78,48 @@ code {
   align-items: center;
   max-width: 800px;
   width: 100%;
+}
+
+/* User Profile Styles */
+.user-section {
+  padding: 10px 20px;
+  background-color: var(--darker-bg);
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: rgba(42, 123, 155, 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(42, 123, 155, 0.3);
+}
+
+.profile-image {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--light-text);
+}
+
+.user-followers {
+  font-size: 0.75rem;
+  color: var(--medium-text);
 }
 
 /* Component styles */
