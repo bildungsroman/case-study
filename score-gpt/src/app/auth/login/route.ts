@@ -30,7 +30,8 @@ export async function GET(request: NextRequest) {
     logEnvironmentInfo(baseUrl, "Login");
     console.log(`🔗 Login redirect URI: ${spotify_redirect_uri}`);
 
-    const scope = "streaming user-read-email user-read-private";
+    const scope =
+      "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state user-read-currently-playing";
     const state = generateRandomString(16);
 
     const auth_query_parameters = new URLSearchParams({

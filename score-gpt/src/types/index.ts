@@ -53,10 +53,15 @@ export interface DeviceReadyEvent {
   device_id: string;
 }
 
+export interface SpotifyErrorEvent {
+  message: string;
+}
+
 // Define a type for all possible event callbacks
 export type SpotifyEventCallback =
   | ((state: DeviceReadyEvent) => void)
-  | ((state?: WebPlaybackState) => void);
+  | ((state?: WebPlaybackState) => void)
+  | ((error: SpotifyErrorEvent) => void);
 
 export interface WebPlaybackPlayer {
   connect: () => Promise<boolean>;
