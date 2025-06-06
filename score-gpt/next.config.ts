@@ -7,12 +7,14 @@ const nextConfig: NextConfig = {
   // Enable server components and server-side rendering
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000"],
+      allowedOrigins: ["localhost:3000", "*.vercel.app"],
     },
   },
   env: {
     NEXT_PUBLIC_APP_URL:
-      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+      process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000",
   },
 };
 

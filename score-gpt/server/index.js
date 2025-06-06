@@ -6,7 +6,7 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-const port = 5000;
+const port = 8000;
 
 // Use dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -15,7 +15,10 @@ const __dirname = dirname(__filename);
 // Use global variable for access token
 globalThis.access_token = "";
 
-dotenv.config();
+// Load environment variables from .env.local
+const envPath = path.join(__dirname, "..", ".env.local");
+console.log(`📁 Loading environment from: ${envPath}`);
+dotenv.config({ path: envPath });
 
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -123,5 +126,12 @@ app.get("/health", (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", () => {
-  console.log(`Listening at http://localhost:${port}`);
+  console.log(`🚀 Backend server listening at http://localhost:${port}`);
+  console.log(`📊 Health check: http://localhost:${port}/health`);
+  console.log(
+    `🔐 Spotify Client ID: ${spotify_client_id ? "✅ Set" : "❌ Missing"}`
+  );
+  console.log(
+    `🔑 Spotify Client Secret: ${spotify_client_secret ? "✅ Set" : "❌ Missing"}`
+  );
 });

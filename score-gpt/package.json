@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "check-backend": "node scripts/check-backend.js",
+    "check-env": "node scripts/check-env.js",
     "dev": "run-p server start",
+    "dev:serverless": "next dev --turbopack",
     "format": "npx prettier . --write",
     "lint": "eslint . && echo '✅ Linting passed!'",
     "lint:fix": "eslint . --fix",
     "prebuild": "npm run lint && npm run typecheck",
-    "server": "node server",
+    "server": "node server/index.js",
     "start": "next dev --turbopack",
     "test": "next test",
     "typecheck": "tsc --noEmit && echo '✅ Type check passed!'"
@@ -33,10 +36,6 @@
     }
   },
   "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
     "next": "^15.3.3",
     "openai": "^4.0.0",
@@ -48,6 +47,10 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@next/eslint-plugin-next": "^15.3.3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.11.30",

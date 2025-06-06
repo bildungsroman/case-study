@@ -1,66 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// This is a server-side API route that handles token requests
+// This API route returns the stored Spotify access token
 export async function GET(request: NextRequest) {
   try {
-    // Get the token from cookies using request.cookies instead of cookies()
+    // Get the token from cookies
     const token = request.cookies.get("spotify_token")?.value;
 
-    // If we don't have a token, try to get it from the backend server
-    if (!token) {
-      console.log("No token in cookies, fetching from backend server");
-
-      try {
-        const response = await fetch("http://localhost:5000/auth/token", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          console.error(
-            `Backend server responded with status: ${response.status}`
-          );
-          throw new Error(
-            `Backend server responded with status: ${response.status}`
-          );
-        }
-
-        const data = await response.json();
-        console.log("Received data from backend:", data);
-
-        // If we got a token from the backend, return it
-        if (data.access_token) {
-          const response = NextResponse.json({
-            access_token: data.access_token,
-          });
-          // Set the cookie in the response
-          response.cookies.set("spotify_token", data.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 3600,
-            path: "/",
-          });
-          return response;
-        }
-
-        // If we didn't get a token, return an empty response
-        return NextResponse.json({ access_token: "" });
-      } catch (error) {
-        console.error("Error fetching token from backend:", error);
-        return NextResponse.json(
-          { error: "Failed to get token from backend" },
-          { status: 500 }
-        );
-      }
+    if (token) {
+      return NextResponse.json({
+        access_token: token,
+        expires_at: Date.now() + 3600 * 1000, // Assume 1 hour expiry
+      });
     }
 
-    // If we have a token in cookies, return it
-    console.log("Found token in cookies");
-    return NextResponse.json({ access_token: token });
+    // No token found
+    return NextResponse.json(
+      {
+        access_token: null,
+        error: "No token found",
+      },
+      { status: 401 }
+    );
   } catch (error) {
-    console.error("Error in token API route:", error);
-    return NextResponse.json({ error: "Failed to get token" }, { status: 500 });
+    console.error("Error getting token:", error);
+    return NextResponse.json(
+      {
+        access_token: null,
+        error: "Internal server error",
+      },
+      { status: 500 }
+    );
   }
 }
